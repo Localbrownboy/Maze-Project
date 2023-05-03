@@ -1,0 +1,379 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MazeLevel</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.level</a>
+</div>
+
+<h1>Coverage Summary for Class: MazeLevel (com.group23.app.level)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MazeLevel</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (10/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75.5%
+  </span>
+  <span class="absValue">
+    (71/94)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.level;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;//import com.group23.app.Tile;
+&nbsp;import com.group23.app.*;
+&nbsp;import com.group23.app.entity.*;
+&nbsp;import com.group23.app.env.*;
+&nbsp;
+&nbsp;import java.util.Properties;
+&nbsp;import java.util.concurrent.*;
+&nbsp;
+&nbsp;
+&nbsp;import java.awt.*;;
+&nbsp;
+&nbsp;/**
+&nbsp; * The base class which handles the mazes and storing their entities
+&nbsp; */
+&nbsp;
+&nbsp;public class MazeLevel {
+&nbsp;    
+&nbsp;    public int collectedKeys;
+&nbsp;    public int totalKeys;
+&nbsp;    public boolean hasCrystal;
+&nbsp;    public int scoreNum;
+&nbsp;    public int collectedCrystals;
+<b class="fc">&nbsp;    public int playerHealthMax = 3;</b>
+&nbsp;    public int playerHealthCurrent;
+&nbsp;    public int width;
+&nbsp;    public int height;
+&nbsp;
+&nbsp;    public int tickspeed;
+&nbsp;    public int ticksBeforeUpdate;
+&nbsp;
+&nbsp;    public int fireCooldown;
+&nbsp;
+&nbsp;    public int iceCooldown;
+&nbsp;
+&nbsp;    public boolean testMode;
+&nbsp;
+&nbsp;    private boolean initialized;
+&nbsp;
+&nbsp;    public int winState;
+&nbsp;
+&nbsp;
+&nbsp;    // all of the entities in the level
+&nbsp;    public ArrayList&lt;Entity&gt; entities;
+&nbsp;
+&nbsp;    //the grid of tiles
+&nbsp;    public ArrayList&lt;ArrayList&lt;Tile&gt;&gt; _tileMap;
+&nbsp; 
+&nbsp;
+&nbsp;
+&nbsp;//Initializes all basic features of Maze, such as the maze itself, tiles, and entities
+<b class="fc">&nbsp;    public MazeLevel(int w, int h, int speed){</b>
+<b class="fc">&nbsp;        width = w;</b>
+<b class="fc">&nbsp;        height = h;</b>
+<b class="fc">&nbsp;        tickspeed = speed;</b>
+<b class="fc">&nbsp;        ticksBeforeUpdate = speed;</b>
+<b class="fc">&nbsp;        playerHealthCurrent = playerHealthMax = 3;</b>
+<b class="fc">&nbsp;        collectedCrystals = 0;</b>
+<b class="fc">&nbsp;        hasCrystal = false;</b>
+<b class="fc">&nbsp;        initialized = false;</b>
+<b class="fc">&nbsp;        testMode = false;</b>
+<b class="fc">&nbsp;        winState = 0;</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        scoreNum = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;        entities = new ArrayList&lt;Entity&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        _tileMap = new ArrayList&lt;ArrayList&lt;Tile&gt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        for(int i = 0; i &lt; width; i++){</b>
+<b class="fc">&nbsp;            ArrayList&lt;Tile&gt; column = new ArrayList&lt;Tile&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;            for(int j = 0; j &lt; height; j++){</b>
+<b class="fc">&nbsp;                column.add(new Tile());</b>
+&nbsp;            }
+&nbsp;            
+<b class="fc">&nbsp;            _tileMap.add(column);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    //public void initialize(){} //unused
+&nbsp;
+&nbsp;    public Tile tileAt(int x, int y){
+<b class="fc">&nbsp;        if(x &lt; 0 || x &gt;= width || y &lt; 0 || y &gt;= height){</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Could not get tile, coordinates out of range&quot;);</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return _tileMap.get(x).get(y);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;//Spawn crystal at randomly generated spot
+&nbsp;    public void spawnCrystal(){
+&nbsp;        //
+<b class="fc">&nbsp;        int randomX = ThreadLocalRandom.current().nextInt(0, width);</b>
+<b class="fc">&nbsp;        int randomY = ThreadLocalRandom.current().nextInt(0, height);</b>
+&nbsp;
+&nbsp;//        if(tileAt(randomX , randomY).checkifCollides() ) {
+&nbsp;//            return;
+&nbsp;//        }
+<b class="fc">&nbsp;        int n = tileAt(randomX , randomY).entities.size();</b>
+<b class="fc">&nbsp;        for (int i = n-1; i &gt;= 0; i--){</b>
+<b class="fc">&nbsp;            ArrayList&lt;EntityProperty&gt; properties = tileAt(randomX , randomY).entities.get(i).getProperties();</b>
+<b class="fc">&nbsp;            int k = properties.size();</b>
+<b class="fc">&nbsp;            for (int j = 0 ; j &lt; k ; k++) {</b>
+<b class="fc">&nbsp;                if (properties.get(j) == EntityProperty.Solid || properties.get(j) == EntityProperty.Hazard) {</b>
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;                spawnEntity(new Crystal(this), randomX, randomY);</b>
+<b class="fc">&nbsp;                hasCrystal = true;</b>
+&nbsp;    }
+&nbsp;    // automatically place an entity in the level
+&nbsp;    public void spawnEntity(Entity e, int x, int y){
+<b class="fc">&nbsp;        if(entities.contains(e)){</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;        
+<b class="fc">&nbsp;        entities.add(e);</b>
+<b class="fc">&nbsp;        e.setPosition(x, y);</b>
+<b class="fc">&nbsp;        tileAt(x, y).entities.add(e);</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates when there is a level tick, which occurs once a certain amount of frames determined by TickSpeed;
+&nbsp;     * 
+&nbsp;     */
+&nbsp;    public void updateTick(){
+&nbsp;
+&nbsp;        //first iteration to verify tile sorting
+&nbsp;
+<b class="fc">&nbsp;        if(!initialized){</b>
+<b class="fc">&nbsp;            sortAllEntities();</b>
+<b class="fc">&nbsp;            initialized = true;</b>
+&nbsp;        }
+&nbsp;        
+&nbsp;
+&nbsp;        //first iteration for updates 
+<b class="fc">&nbsp;        for(int i = 0; i &lt; entities.size(); i++){</b>
+<b class="fc">&nbsp;            entities.get(i).update();</b>
+&nbsp;        }
+&nbsp;        //second iteration to verify tile sorting
+<b class="fc">&nbsp;        sortEntities();</b>
+&nbsp;        //third iteration to check entity collision
+<b class="fc">&nbsp;        for(int i = 0; i &lt; entities.size(); i++){</b>
+<b class="fc">&nbsp;            Entity e = entities.get(i);</b>
+<b class="fc">&nbsp;            e.checkCollision(e.getCurrentTile().entities);   </b>
+&nbsp;        }
+&nbsp;        //tries to spawn a bonus crystal if one is not onscreen
+<b class="fc">&nbsp;        if(hasCrystal == false)</b>
+<b class="fc">&nbsp;            spawnCrystal();</b>
+&nbsp;
+&nbsp;        //stops the game if the player is killed
+<b class="fc">&nbsp;        if(playerHealthCurrent&lt;=0){</b>
+&nbsp;            //if(!testMode){
+<b class="fc">&nbsp;                Game.playSE(2);</b>
+&nbsp;            //}
+<b class="fc">&nbsp;            leave(false);</b>
+&nbsp;            
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * exits the level to the appropriate screen
+&nbsp;     * @param win whether or not the level was won or lost
+&nbsp;     */
+&nbsp;    public void leave(boolean win){
+<b class="fc">&nbsp;        winState = win ? 1 : -1;</b>
+<b class="fc">&nbsp;        if(testMode){</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;        
+<b class="fc">&nbsp;        if(win){</b>
+<b class="fc">&nbsp;            scoreNum+=100;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        Game.stopMusic(true);</b>
+<b class="fc">&nbsp;        Game.accumulatingScore += scoreNum;</b>
+<b class="fc">&nbsp;        if(win){</b>
+<b class="fc">&nbsp;            Game.setGameState(GameState.GameWinScreen);</b>
+&nbsp;        }else{
+<b class="fc">&nbsp;            Game.setGameState(GameState.GameOverScreen);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sorts entities by draw layer so all the drawing is correctly ordered
+&nbsp;     */
+&nbsp;    public void sortEntities(){
+<b class="fc">&nbsp;        for(int i = 0; i &lt; width; i++){</b>
+<b class="fc">&nbsp;            for(int j = 0; j &lt; height; ++j ){</b>
+<b class="fc">&nbsp;                Tile t = tileAt(i, j);</b>
+<b class="fc">&nbsp;                t.entities.sort((o1, o2) -&gt; Integer.compare(o1.drawLayer, o2.drawLayer));</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sorts entities by draw layer so all the drawing is correctly ordered
+&nbsp;     */
+&nbsp;    public void sortAllEntities(){
+&nbsp;        
+<b class="fc">&nbsp;        entities.sort((o1, o2) -&gt; Integer.compare(o1.drawLayer, o2.drawLayer));</b>
+&nbsp;         
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public Rectangle getRenderBox(){
+&nbsp;        
+<b class="nc">&nbsp;        float longer = width;</b>
+<b class="nc">&nbsp;        float shorter = height;</b>
+<b class="nc">&nbsp;        boolean taller = false;</b>
+&nbsp;
+<b class="nc">&nbsp;        if(height&gt;width){</b>
+<b class="nc">&nbsp;            longer = height;</b>
+<b class="nc">&nbsp;            shorter = width;</b>
+<b class="nc">&nbsp;            taller = true;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Rectangle rect = new Rectangle();</b>
+&nbsp;
+<b class="nc">&nbsp;        if(taller){</b>
+<b class="nc">&nbsp;            rect.y = (int)((float)GameEnvironment.levelRenderSquareCentre.y - (GameEnvironment.levelRenderSquareWidth/2f));</b>
+<b class="nc">&nbsp;            rect.x = (int)((float)GameEnvironment.levelRenderSquareCentre.x - ((GameEnvironment.levelRenderSquareWidth/2f)*(shorter/longer)));</b>
+<b class="nc">&nbsp;            rect.width = (int)((float)GameEnvironment.levelRenderSquareWidth * (shorter/longer));</b>
+<b class="nc">&nbsp;            rect.height = (int)((float)GameEnvironment.levelRenderSquareWidth);</b>
+&nbsp;
+&nbsp;        }else{
+<b class="nc">&nbsp;            rect.x = (int)((float)GameEnvironment.levelRenderSquareCentre.x - (GameEnvironment.levelRenderSquareWidth/2f));</b>
+<b class="nc">&nbsp;            rect.y = (int)((float)GameEnvironment.levelRenderSquareCentre.y - ((GameEnvironment.levelRenderSquareWidth/2f)*(shorter/longer)));</b>
+<b class="nc">&nbsp;            rect.height = (int)((float)GameEnvironment.levelRenderSquareWidth * (shorter/longer));</b>
+<b class="nc">&nbsp;            rect.width = (int)((float)GameEnvironment.levelRenderSquareWidth);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return rect;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getTileSize(){
+<b class="nc">&nbsp;        float longer = width &gt; height ? width : height;</b>
+&nbsp;        
+<b class="nc">&nbsp;        return (int)(GameEnvironment.levelRenderSquareWidth / longer);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getScore()
+&nbsp;    {
+<b class="fc">&nbsp;        int score = 0;</b>
+<b class="fc">&nbsp;        score += this.collectedCrystals*20;</b>
+<b class="fc">&nbsp;        score += this.collectedKeys*30;</b>
+<b class="fc">&nbsp;        return score;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public Point findPlayerPosition(){
+<b class="fc">&nbsp;        for(int i = 0; i &lt; entities.size(); ++i){</b>
+<b class="fc">&nbsp;            if(entities.get(i).getProperties().contains(EntityProperty.Player)){</b>
+<b class="fc">&nbsp;                return new Point(entities.get(i).getPosition()[0], entities.get(i).getPosition()[1]);</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

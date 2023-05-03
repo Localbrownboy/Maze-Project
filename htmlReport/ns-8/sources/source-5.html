@@ -1,0 +1,126 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GameUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.utils</a>
+</div>
+
+<h1>Coverage Summary for Class: GameUtils (com.group23.app.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.utils;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * A class which is used to hold helper methods for game and entity classes
+&nbsp; */
+<b class="nc">&nbsp;public class GameUtils {</b>
+&nbsp;    
+&nbsp;    public static Point pointLerp(Point p1, Point p2, float v){
+<b class="nc">&nbsp;        float dx = p2.x - p1.x;</b>
+<b class="nc">&nbsp;        float dy = p2.y - p1.y;</b>
+&nbsp;        
+<b class="nc">&nbsp;        float lx = ((float)p1.x) + (v*dx);</b>
+<b class="nc">&nbsp;        float ly = ((float)p1.y) + (v*dy);</b>
+&nbsp;
+<b class="nc">&nbsp;        return new Point((int)lx, (int)ly);</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

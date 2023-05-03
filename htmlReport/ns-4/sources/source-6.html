@@ -1,0 +1,257 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.env</a>
+</div>
+
+<h1>Coverage Summary for Class: UI (com.group23.app.env)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UI</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (1/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    21.6%
+  </span>
+  <span class="absValue">
+    (11/51)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.env;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * the interface that is shown to the user around the game screen
+&nbsp; */
+&nbsp;public class UI {
+&nbsp;    GameEnvironment ge;
+&nbsp;    //Font arial_40;
+&nbsp;    Font arial40;
+&nbsp;
+&nbsp;    //Font arial40_;
+&nbsp;
+&nbsp;    //Font arial401;
+&nbsp;    //Font arial402;
+&nbsp;    BufferedImage keyImage;
+&nbsp;    BufferedImage crystalImage;
+&nbsp;
+&nbsp;    BufferedImage fireImage;
+&nbsp;
+&nbsp;    BufferedImage iceImage;
+&nbsp;
+&nbsp;    BufferedImage readyImage;
+&nbsp;
+&nbsp;    public UI(GameEnvironment ge)
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        this.ge = ge;</b>
+&nbsp;        //Create font for UI
+<b class="fc">&nbsp;        arial40 = new Font(&quot;Arial&quot;, Font.BOLD, 40);</b>
+&nbsp;        //arial_40 = new Font(&quot;Arial&quot;, Font.BOLD, 40);
+&nbsp;
+&nbsp;        //Load the resource for the key sprite into variable keyImage
+&nbsp;        try{
+<b class="fc">&nbsp;            keyImage= ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/Key.png&quot;));</b>
+<b class="nc">&nbsp;        } catch(IOException e){</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;        //Load the resource for the crystal sprite into variable crystalImage
+&nbsp;        try{
+<b class="fc">&nbsp;            crystalImage= ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/Crystal.png&quot;));</b>
+<b class="nc">&nbsp;        } catch(IOException e){</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;        //Load the resource for the fire sprite into variable fireImage
+&nbsp;        try{
+<b class="fc">&nbsp;            fireImage= ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/FireSpell.png&quot;));</b>
+<b class="nc">&nbsp;        } catch(IOException e){</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;        //Load the resource for the ice sprite into variable iceImage
+&nbsp;        try{
+<b class="fc">&nbsp;            iceImage= ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/WallIce.png&quot;));</b>
+<b class="nc">&nbsp;        } catch(IOException e){</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * draw the keys collected
+&nbsp;     * @param g2    tool to draw to the window
+&nbsp;     */
+&nbsp;    public void drawKeyCount(Graphics2D g2)
+&nbsp;    {
+<b class="nc">&nbsp;        g2.setFont(arial40);</b>
+<b class="nc">&nbsp;        g2.setColor(Color.WHITE);</b>
+<b class="nc">&nbsp;        g2.drawImage(keyImage, 0, 25, null);</b>
+<b class="nc">&nbsp;        g2.drawString(&quot;= &quot; + ge.level.collectedKeys, 80, 89);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * draw the crystals collected
+&nbsp;     * @param g2    tool to draw to the window
+&nbsp;     */
+&nbsp;    public void drawCrystalScore(Graphics2D g2)
+&nbsp;    {
+<b class="nc">&nbsp;        g2.setFont(arial40);</b>
+<b class="nc">&nbsp;        g2.setColor(Color.WHITE);</b>
+<b class="nc">&nbsp;        g2.drawImage(crystalImage, 6, 120, null);</b>
+<b class="nc">&nbsp;        g2.drawString(&quot;= &quot; + ge.level.collectedCrystals, 110, 180);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * draw the score
+&nbsp;     * @param g2    tool to draw to the window
+&nbsp;     */
+&nbsp;    public void drawScore(Graphics2D g2)
+&nbsp;    {
+<b class="nc">&nbsp;        g2.setFont(arial40);</b>
+<b class="nc">&nbsp;        g2.setColor(Color.WHITE);</b>
+<b class="nc">&nbsp;        g2.drawString(&quot;Score = &quot; + ge.level.getScore(), 6, 260);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * draw the current player health
+&nbsp;     * @param g2    tool to draw to the window
+&nbsp;     */
+&nbsp;    public void drawLife(Graphics2D g2)
+&nbsp;    {
+<b class="nc">&nbsp;        g2.setFont(arial40);</b>
+<b class="nc">&nbsp;        g2.setColor(Color.WHITE);</b>
+<b class="nc">&nbsp;        g2.drawString(&quot;Life = &quot; + ge.level.playerHealthCurrent + &quot;/&quot; + ge.level.playerHealthMax, 6, 340);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * draw the fire ability icon and its cooldown
+&nbsp;     * @param g2    tool to draw to the window
+&nbsp;     */
+&nbsp;    public void drawFire(Graphics2D g2) {
+<b class="nc">&nbsp;        g2.setFont(arial40);</b>
+<b class="nc">&nbsp;        g2.setColor(Color.WHITE);</b>
+<b class="nc">&nbsp;        g2.drawImage(fireImage, 1200, 25, null);</b>
+<b class="nc">&nbsp;        if (ge.level.fireCooldown &gt; 0) {</b>
+<b class="nc">&nbsp;            g2.drawString(&quot; &quot; + ge.level.fireCooldown, 1245, 36);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            g2.drawImage(readyImage, 1255, 33, null);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * draw the ice ability icon and its cooldown
+&nbsp;     * @param g2    tool to draw to the window
+&nbsp;     */
+&nbsp;    public void drawIce(Graphics2D g2) {
+<b class="nc">&nbsp;        g2.setFont(arial40);</b>
+<b class="nc">&nbsp;        g2.setColor(Color.RED);</b>
+<b class="nc">&nbsp;        g2.drawImage(iceImage, 1220, 200, null);</b>
+<b class="nc">&nbsp;        if (ge.level.iceCooldown &gt; 0) {</b>
+<b class="nc">&nbsp;            g2.drawString(&quot; &quot; + ge.level.iceCooldown, 1280, 226);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            g2.drawImage(readyImage, 1290, 216, null);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    //Function that is called from GameEnvironment to draw the Graphics UI. Made in UI class in order to prevent
+&nbsp;    //other classes from gaining info from other classes (law of demeter)
+&nbsp;    public void drawGraphics(Graphics2D g2)
+&nbsp;    {
+<b class="nc">&nbsp;        drawKeyCount(g2);</b>
+<b class="nc">&nbsp;        drawCrystalScore(g2);</b>
+<b class="nc">&nbsp;        drawScore(g2);</b>
+<b class="nc">&nbsp;        drawLife(g2);</b>
+<b class="nc">&nbsp;        drawFire(g2);</b>
+<b class="nc">&nbsp;        drawIce(g2);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,498 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Golem</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: Golem (com.group23.app.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Golem</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (8/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.4%
+  </span>
+  <span class="absValue">
+    (105/129)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Golem$DijkstraNode</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Golem$DijkstraPath</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (120/144)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.entity;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import com.group23.app.*;
+&nbsp;import com.group23.app.level.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Main enemy entity in the game, chases down the player and insta-kills them
+&nbsp; * extends {@link MobileEntity}
+&nbsp; */
+&nbsp;public class Golem extends MobileEntity {
+&nbsp;
+&nbsp;    // private Player player;
+&nbsp;
+&nbsp;    public boolean active;
+&nbsp;    private DijkstraPath _path;
+&nbsp;    
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the entity
+&nbsp;     * @param L the level that the entity will spawn on
+&nbsp;     */
+&nbsp;    public Golem(MazeLevel L) {
+<b class="fc">&nbsp;        super(L);</b>
+<b class="fc">&nbsp;        drawLayer = 10;</b>
+<b class="fc">&nbsp;        _path = new DijkstraPath();</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            texture = ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/Golem.png&quot;));</b>
+<b class="fc">&nbsp;            additionalTextures.add(ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/GolemDirUp.png&quot;)));</b>
+<b class="fc">&nbsp;            additionalTextures.add(ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/GolemDirDown.png&quot;)));</b>
+<b class="fc">&nbsp;            additionalTextures.add(ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/GolemDirLeft.png&quot;)));</b>
+<b class="fc">&nbsp;            additionalTextures.add(ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/GolemDirRight.png&quot;)));</b>
+<b class="nc">&nbsp;        } catch(IOException e){</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;        
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * creating the path the golem will take
+&nbsp;     * @param endpoint
+&nbsp;     * @return the arraylist of points that the golem will attempt to take
+&nbsp;     */
+&nbsp;    public DijkstraPath findDijkstraPath(Point endpoint){
+&nbsp;
+<b class="fc">&nbsp;        DijkstraNode start = new DijkstraNode(getPosition()[0], getPosition()[1]);</b>
+<b class="fc">&nbsp;        DijkstraNode end = new DijkstraNode(endpoint.x, endpoint.y);</b>
+&nbsp;
+<b class="fc">&nbsp;        if(start.x == end.x &amp;&amp; start.y == end.y){</b>
+<b class="fc">&nbsp;            ArrayList&lt;Point&gt; lol = new ArrayList&lt;Point&gt;();</b>
+<b class="fc">&nbsp;            lol.add(endpoint);</b>
+<b class="fc">&nbsp;            return new DijkstraPath(lol, 0);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        DijkstraNode[][] grid = calculateShortestPathGrid(level.width, level.height, start, end);</b>
+&nbsp;            
+&nbsp;    
+<b class="fc">&nbsp;        return createPathFromGrid(grid, start, end);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calculates relative distance values across a tile grid using a priority queue
+&nbsp;     * @param xsize the width of the grid
+&nbsp;     * @param ysize the height of the grid
+&nbsp;     * @param start the intended start point in grid coordinates
+&nbsp;     * @param end the intended end point in grid coordinates
+&nbsp;     * @return the grid with adjusted distance values
+&nbsp;     */
+&nbsp;    public DijkstraNode[][] calculateShortestPathGrid(int xsize, int ysize, DijkstraNode start, DijkstraNode end){
+<b class="fc">&nbsp;        DijkstraNode[][] grid = new DijkstraNode[xsize][ysize];</b>
+&nbsp;
+<b class="fc">&nbsp;        for(int i = 0; i &lt; xsize; ++i){</b>
+<b class="fc">&nbsp;            for(int j = 0; j &lt; ysize; ++j){</b>
+<b class="fc">&nbsp;                grid[i][j] = new DijkstraNode(i, j);</b>
+<b class="fc">&nbsp;                if(level.tileAt(i,j).checkifCollides()){</b>
+<b class="fc">&nbsp;                    grid[i][j].extraDist = 1000000;</b>
+&nbsp;                }else{
+<b class="fc">&nbsp;                    boolean hasgolem = false;</b>
+<b class="fc">&nbsp;                    for(int k = 0; k &lt;level.tileAt(i, j).entities.size(); ++k){</b>
+<b class="fc">&nbsp;                        Entity e = level.tileAt(i, j).entities.get(k);</b>
+<b class="fc">&nbsp;                        if(e.getProperties().contains(EntityProperty.Instakill)){</b>
+<b class="nc">&nbsp;                            hasgolem = true;</b>
+&nbsp;                        }
+&nbsp;                    }
+&nbsp;
+<b class="fc">&nbsp;                    if(hasgolem){</b>
+<b class="nc">&nbsp;                        grid[i][j].extraDist = 6;</b>
+&nbsp;                    }else{
+<b class="fc">&nbsp;                        grid[i][j].extraDist = 1;</b>
+&nbsp;                    }
+&nbsp;
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Comparator&lt;DijkstraNode&gt; adjacencyComparator = (left, right) -&gt; {</b>
+<b class="fc">&nbsp;            if (left.distance &gt; (right.distance)) {</b>
+<b class="fc">&nbsp;            return 1;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            return -1;</b>
+&nbsp;            };
+&nbsp;
+<b class="fc">&nbsp;        start.distance = 0;</b>
+&nbsp;
+&nbsp;
+&nbsp;        //create priority queue
+<b class="fc">&nbsp;        Queue&lt;DijkstraNode&gt; queueB = new PriorityQueue&lt;DijkstraNode&gt;(xsize&gt;ysize ? xsize : ysize, adjacencyComparator);</b>
+&nbsp;
+<b class="fc">&nbsp;        queueB.add(start);</b>
+&nbsp;
+<b class="fc">&nbsp;        while (queueB.size() &gt; 0) {</b>
+<b class="fc">&nbsp;            DijkstraNode current = queueB.remove();</b>
+&nbsp;            DijkstraNode t;
+&nbsp;           
+&nbsp;            // Up
+<b class="fc">&nbsp;            if (current.y - 1 &gt;= 0) {</b>
+<b class="fc">&nbsp;                t = grid[current.x][current.y-1];</b>
+<b class="fc">&nbsp;                if (!t.visited &amp;&amp;  t.distance &gt; current.distance + t.extraDist) {</b>
+<b class="fc">&nbsp;                    t.distance = current.distance + t.extraDist;</b>
+<b class="fc">&nbsp;                    t.parent = current;</b>
+<b class="fc">&nbsp;                    queueB.add(t);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;           
+&nbsp;            // Left
+<b class="fc">&nbsp;            if (current.x - 1 &gt;= 0) {</b>
+<b class="fc">&nbsp;                t = grid[current.x-1][current.y];</b>
+<b class="fc">&nbsp;                if (!t.visited &amp;&amp;  t.distance &gt; current.distance + t.extraDist) {</b>
+<b class="fc">&nbsp;                    t.distance = current.distance + t.extraDist;</b>
+<b class="fc">&nbsp;                    t.parent = current;</b>
+<b class="fc">&nbsp;                    queueB.add(t);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            // Down
+<b class="fc">&nbsp;            if (current.y + 1 &lt; ysize) {</b>
+<b class="fc">&nbsp;                t = grid[current.x][current.y+1];</b>
+<b class="fc">&nbsp;                if (!t.visited &amp;&amp;  t.distance &gt; current.distance + t.extraDist) {</b>
+<b class="fc">&nbsp;                    t.distance = current.distance + t.extraDist;</b>
+<b class="fc">&nbsp;                    t.parent = current;</b>
+<b class="fc">&nbsp;                    queueB.add(t);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            // Right
+<b class="fc">&nbsp;            if (current.x + 1 &lt; xsize) {</b>
+<b class="fc">&nbsp;                t = grid[current.x+1][current.y];</b>
+<b class="fc">&nbsp;                if (!t.visited &amp;&amp;  t.distance &gt; current.distance + t.extraDist) {</b>
+<b class="fc">&nbsp;                    t.distance = current.distance + t.extraDist;</b>
+<b class="fc">&nbsp;                    t.parent = current;</b>
+<b class="fc">&nbsp;                    queueB.add(t);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            current.visited = true;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        return grid;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Takes in a path grid to find the the list of next steps to make
+&nbsp;     * @param grid the path grid
+&nbsp;     * @param start the start point
+&nbsp;     * @param end the end point
+&nbsp;     * @return a DijkstraPath object including the steps to take, and the modified angle of the path
+&nbsp;     */
+&nbsp;    public DijkstraPath createPathFromGrid(DijkstraNode[][] grid, DijkstraNode start, DijkstraNode end){
+&nbsp;        
+<b class="fc">&nbsp;        ArrayList&lt;Point&gt; path = new ArrayList&lt;Point&gt;();</b>
+&nbsp;        // Checking if a path exists
+<b class="fc">&nbsp;        if (!(grid[end.x][end.y].distance == Integer.MAX_VALUE)) {</b>
+&nbsp;            //Trace back the path
+<b class="fc">&nbsp;            DijkstraNode current = grid[end.x][end.y];</b>
+&nbsp;
+<b class="fc">&nbsp;            while (current.parent != null) {</b>
+<b class="fc">&nbsp;                path.add(new Point(current.x, current.y));</b>
+<b class="fc">&nbsp;                current = current.parent;</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } else{</b>
+<b class="nc">&nbsp;            System.out.println(&quot;No possible path&quot;);</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        } 
+&nbsp;
+<b class="fc">&nbsp;        double d = grid[end.x][end.y].distance;</b>
+&nbsp;        //System.out.println(d);
+&nbsp;
+<b class="fc">&nbsp;        return new DijkstraPath(path, d);</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * checks collision with other entities on this tile. if it collides with a player entity, it will set their health to 0
+&nbsp;     * @param othersOnTile an ArrayList of Entities that are share a tile with this entity 
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void checkCollision(ArrayList&lt;Entity&gt; othersOnTile){
+&nbsp;
+<b class="fc">&nbsp;        super.checkCollision(othersOnTile);</b>
+<b class="fc">&nbsp;        for(int i = 0; i &lt; othersOnTile.size(); ++i){</b>
+<b class="fc">&nbsp;            Entity e = othersOnTile.get(i);</b>
+<b class="fc">&nbsp;            if(e.getProperties().contains(EntityProperty.Player)){</b>
+<b class="fc">&nbsp;                level.playerHealthCurrent = 0;</b>
+&nbsp;                
+&nbsp;                //Game.stopMusic(true);
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Will try to move to the tile that is determined by the {@link #findDijkstraPath(Point)}
+&nbsp;     */
+&nbsp;    @Override
+<b class="fc">&nbsp;    public void movementBehaviour() {</b>
+<b class="fc">&nbsp;        if (this.level == null) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        //&amp;&amp;_path.distance&lt;1000000</b>
+<b class="fc">&nbsp;        if(_path!=null&amp;&amp;_path.path.size()&gt;0){</b>
+<b class="fc">&nbsp;            if(_path.distance&lt;1000000){</b>
+<b class="fc">&nbsp;                active = true;</b>
+&nbsp;            }
+<b class="fc">&nbsp;            </b>
+<b class="fc">&nbsp;            Point next = _path.path.get(_path.path.size()-1);</b>
+<b class="fc">&nbsp;            if(active){</b>
+<b class="fc">&nbsp;                tryMoveTo(next.x, next.y);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        _path = findDijkstraPath(level.findPlayerPosition());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    
+&nbsp;    @Override
+&nbsp;
+&nbsp;    
+&nbsp;    public void draw(Graphics2D g){
+<b class="nc">&nbsp;        </b>
+<b class="nc">&nbsp;        super.draw(g);</b>
+<b class="nc">&nbsp;        if(animFrames==1){</b>
+<b class="nc">&nbsp;            Point next = _path.path.get(_path.path.size()-1);</b>
+<b class="nc">&nbsp;            Point current = getPositionAsPoint();</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;            if(next.x-current.x&lt;0){</b>
+<b class="nc">&nbsp;                curDirection = Direction.Left;</b>
+<b class="nc">&nbsp;            }else if(next.x-current.x&gt;0){</b>
+<b class="nc">&nbsp;                curDirection = Direction.Right;</b>
+<b class="nc">&nbsp;            }else if(next.y-current.y&lt;0){</b>
+<b class="nc">&nbsp;                curDirection = Direction.Up;</b>
+<b class="nc">&nbsp;            }else if(next.y-current.y&gt;0){</b>
+<b class="nc">&nbsp;                curDirection = Direction.Down;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;        /*
+&nbsp;        if(texture==null){
+&nbsp;            return;
+&nbsp;        }
+&nbsp;        int ts = level.getTileSize();
+&nbsp;
+&nbsp;        //find the location based on the game environment point draw bounds
+&nbsp;        Point drawPosition = new Point(level.getRenderBox().x + (getPosition()[0]*level.getTileSize()), level.getRenderBox().y + (getPosition()[1]*level.getTileSize()));
+&nbsp;
+&nbsp;        g.drawImage(texture, drawPosition.x, drawPosition.y, ts, ts, null);
+&nbsp;
+&nbsp;        for(int i = 0; i &lt; _path.size(); ++i){
+&nbsp;            Point gcoord = _path.get(i);
+&nbsp;            Point drawPosition2 = new Point(level.getRenderBox().x + (gcoord.x*level.getTileSize()), level.getRenderBox().y + (gcoord.y*level.getTileSize()));
+&nbsp;
+&nbsp;            g.drawImage(texture, drawPosition2.x, drawPosition2.y, ts/2, ts/2, null);
+&nbsp;
+&nbsp;        }*/
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * node class that is used by {@link Golem#findDijkstraPath(Point)}
+&nbsp;     */
+&nbsp;    class DijkstraNode {
+&nbsp;        int x;
+<b class="fc">&nbsp;        int y;</b>
+<b class="fc">&nbsp;        double distance = Integer.MAX_VALUE;</b>
+<b class="fc">&nbsp;        DijkstraNode parent = null;</b>
+&nbsp;        boolean visited;
+&nbsp;        double extraDist;
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        public DijkstraNode(int x, int y) {</b>
+<b class="fc">&nbsp;            this.x = x;</b>
+<b class="fc">&nbsp;            this.y = y;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Attempts to Relocate the entity to a new tile, does not move the entity if it tries to move to a solid tile
+&nbsp;     * @param x the x coordinate to move to
+&nbsp;     * @param y the y coordinate to move to
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public boolean tryMoveTo(int x,int y){
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        if(x&lt;0 || x &gt;= level.width|| y &lt; 0 || y &gt;= level.height){</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        if(level.tileAt(x, y).checkifCollides() == true){</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        boolean hasgolem = false;</b>
+<b class="fc">&nbsp;        for(int k = 0; k &lt; level.tileAt(x, y).entities.size(); ++k){</b>
+<b class="fc">&nbsp;            Entity e = level.tileAt(x, y).entities.get(k);</b>
+<b class="fc">&nbsp;            if(e.getProperties().contains(EntityProperty.Instakill)){</b>
+<b class="nc">&nbsp;                hasgolem = true;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        if(hasgolem){</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        </b>
+<b class="fc">&nbsp;        MoveTo(x, y);</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    class DijkstraPath{
+&nbsp;        ArrayList&lt;Point&gt; path;
+&nbsp;        double distance;
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        public DijkstraPath(){</b>
+<b class="fc">&nbsp;            path = new ArrayList&lt;Point&gt;();</b>
+<b class="fc">&nbsp;            distance = 0;</b>
+&nbsp;        }
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;        public DijkstraPath(ArrayList&lt;Point&gt; p, double l){</b>
+<b class="fc">&nbsp;            path = p;</b>
+<b class="fc">&nbsp;            distance = l;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

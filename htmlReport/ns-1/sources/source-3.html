@@ -1,0 +1,208 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > InputHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app</a>
+</div>
+
+<h1>Coverage Summary for Class: InputHandler (com.group23.app)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InputHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (28/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app;
+&nbsp;
+&nbsp;import java.awt.event.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * InputHandler class for listening to keyboard inputs relevant to our game.
+&nbsp; * implements {@link KeyListener}
+&nbsp; */
+&nbsp;public class InputHandler implements KeyListener {
+&nbsp;    
+&nbsp;
+<b class="fc">&nbsp;    public InputHandler(){</b>
+<b class="fc">&nbsp;        QueuedMove = MovementDirection.None;</b>
+<b class="fc">&nbsp;        ZQueued = false;</b>
+<b class="fc">&nbsp;        XQueued = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    
+&nbsp;    public boolean ZQueued;
+&nbsp;    public boolean XQueued;
+&nbsp;
+&nbsp;    public MovementDirection QueuedMove;
+&nbsp;    //public boolean EscQueued;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void keyTyped(KeyEvent e){
+&nbsp;        
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Keeps track of which game keys have been pressed
+&nbsp;     * @param e the event to be processed, is of type {@link KeyEvent}
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void keyPressed(KeyEvent e){
+&nbsp;        
+<b class="nc">&nbsp;        int code = e.getKeyCode();</b>
+<b class="nc">&nbsp;        keyPressBehavior(code);</b>
+&nbsp;        
+&nbsp;    }
+&nbsp;
+&nbsp;    public void keyPressBehavior(int code){
+<b class="fc">&nbsp;        if(Game.CurrentState != GameState.GameScreen){</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        switch (code){</b>
+&nbsp;            case KeyEvent.VK_LEFT:
+&nbsp;                
+<b class="fc">&nbsp;                QueuedMove = MovementDirection.Left;</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Queued left movement&quot;);</b>
+<b class="fc">&nbsp;            break;</b>
+&nbsp;            case KeyEvent.VK_RIGHT:
+&nbsp;                
+<b class="fc">&nbsp;                QueuedMove = MovementDirection.Right;</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Queued right movement&quot;);</b>
+<b class="fc">&nbsp;            break;</b>
+&nbsp;            case KeyEvent.VK_UP:
+&nbsp;                
+<b class="fc">&nbsp;                QueuedMove = MovementDirection.Up;</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Queued up movement&quot;);</b>
+<b class="fc">&nbsp;            break;</b>
+&nbsp;            case KeyEvent.VK_DOWN:
+&nbsp;               
+<b class="fc">&nbsp;                QueuedMove = MovementDirection.Down;</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Queued down movement&quot;);</b>
+<b class="fc">&nbsp;            break;</b>
+&nbsp;            case KeyEvent.VK_ESCAPE:
+<b class="fc">&nbsp;                if(Game.CurrentState==GameState.PauseScreen){</b>
+<b class="nc">&nbsp;                    System.out.println(&quot;attempted unpaused&quot;);</b>
+<b class="nc">&nbsp;                    Game.setGameState(GameState.GameScreen);</b>
+<b class="nc">&nbsp;                }else if(Game.CurrentState == GameState.GameScreen){</b>
+<b class="fc">&nbsp;                    System.out.println(&quot;attempted paused&quot;);</b>
+<b class="fc">&nbsp;                    Game.setGameState(GameState.PauseScreen);</b>
+&nbsp;                }
+<b class="fc">&nbsp;            break;</b>
+&nbsp;            case KeyEvent.VK_Z:
+<b class="fc">&nbsp;                    ZQueued = true;</b>
+<b class="fc">&nbsp;            break;</b>
+&nbsp;            case KeyEvent.VK_X:
+<b class="fc">&nbsp;                XQueued = true;</b>
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void keyReleased(KeyEvent e){
+&nbsp;    
+<b class="nc">&nbsp;    }</b>
+&nbsp;    
+&nbsp;
+&nbsp;    /**
+&nbsp;     * every level tick, all the boolean values must be set back to false
+&nbsp;     */
+&nbsp;    public void setKeysFalse(){
+&nbsp;       
+<b class="fc">&nbsp;        this.QueuedMove = MovementDirection.None;</b>
+<b class="fc">&nbsp;         this.ZQueued = false;</b>
+<b class="fc">&nbsp;         this.XQueued = false;</b>
+&nbsp;        // this.CQueued = false;
+&nbsp;        // this.EscQueued = false;
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

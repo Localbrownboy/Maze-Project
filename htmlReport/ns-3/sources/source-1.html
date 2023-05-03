@@ -1,0 +1,158 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BreakableWall</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: BreakableWall (com.group23.app.entity)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BreakableWall</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (13/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.entity;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;
+&nbsp;import com.group23.app.level.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * Class of breakable wall
+&nbsp; */
+&nbsp;public class BreakableWall extends Wall {
+&nbsp;
+&nbsp;    public BreakableWall(MazeLevel L){
+<b class="fc">&nbsp;        super(L);</b>
+<b class="fc">&nbsp;        drawLayer = 2;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            texture = ImageIO.read(getClass().getResourceAsStream(&quot;/sprites/entities/WallBreakable.png&quot;));</b>
+<b class="fc">&nbsp;        } catch(IOException e){</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        this.getProperties().add(EntityProperty.Breakable);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Is collision checker overridden to match the behaviour expected of a breakable wall
+&nbsp;     * @param othersOnTile  list of other entities on the tile
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void checkCollision(ArrayList othersOnTile) {
+<b class="fc">&nbsp;        super.checkCollision(othersOnTile);</b>
+<b class="fc">&nbsp;        int n = othersOnTile.size();</b>
+<b class="fc">&nbsp;        for(int i =n-1 ; i &gt;= 0 ; i--){</b>
+<b class="fc">&nbsp;            if(othersOnTile.get(i) instanceof FireSpell){</b>
+<b class="fc">&nbsp;                this.wallBreak();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * only called by the classes deSpawn function to remove it off the level
+&nbsp;     */
+&nbsp;    private void wallBreak(){
+<b class="fc">&nbsp;        this.remove();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public ArrayList&lt;EntityProperty&gt; getProperties(){
+<b class="fc">&nbsp;        return new ArrayList&lt;EntityProperty&gt;(List.of(EntityProperty.Solid, EntityProperty.Breakable));</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

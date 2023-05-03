@@ -1,0 +1,191 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TwoButtonEnvironment</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.env</a>
+</div>
+
+<h1>Coverage Summary for Class: TwoButtonEnvironment (com.group23.app.env)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TwoButtonEnvironment</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.9%
+  </span>
+  <span class="absValue">
+    (31/32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.env;
+&nbsp;
+&nbsp;
+&nbsp;import com.group23.app.Game;
+&nbsp;import com.group23.app.action.*;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;import java.awt.Color;
+&nbsp;import java.awt.Graphics2D;
+&nbsp;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Base class for a template game environment type with two buttons, used for a variety of menu type screens. Extends {@link JPanel}. 
+&nbsp; */
+&nbsp;public class TwoButtonEnvironment extends JPanel {
+&nbsp;    
+&nbsp;    public JButton button1;
+&nbsp;    public JButton button2;
+&nbsp;    public BufferedImage titleImage;
+&nbsp;    public Font arial40;
+&nbsp;
+<b class="fc">&nbsp;    public TwoButtonEnvironment(Action a1, Action a2, String texturePath){</b>
+<b class="fc">&nbsp;        this.setPreferredSize(new Dimension(Game.screenWidth, Game.screenHeight));</b>
+<b class="fc">&nbsp;        this.setBackground(Color.DARK_GRAY);</b>
+<b class="fc">&nbsp;        this.setDoubleBuffered(true);</b>
+<b class="fc">&nbsp;        this.addKeyListener(Game.Input);</b>
+<b class="fc">&nbsp;        this.setFocusable(true);</b>
+<b class="fc">&nbsp;        this.setLayout(null);</b>
+&nbsp;
+<b class="fc">&nbsp;        arial40 = new Font(&quot;Arial&quot;, Font.BOLD, 40);</b>
+&nbsp;
+<b class="fc">&nbsp;        if(a1!=null){</b>
+<b class="fc">&nbsp;            button1 = new JButton(a1);</b>
+<b class="fc">&nbsp;            button1.setLayout(null);</b>
+<b class="fc">&nbsp;            button1.setPreferredSize(new Dimension(200, 100));</b>
+<b class="fc">&nbsp;            button1.setBounds(700, 300, 200, 100);</b>
+<b class="fc">&nbsp;            this.add(button1);</b>
+&nbsp;        }
+&nbsp;        
+<b class="fc">&nbsp;        if(a2!=null){</b>
+<b class="fc">&nbsp;            button2 = new JButton(a2);</b>
+<b class="fc">&nbsp;            button2.setLayout(null);</b>
+<b class="fc">&nbsp;            button2.setPreferredSize(new Dimension(200, 100));</b>
+<b class="fc">&nbsp;            button2.setBounds(700, 420, 200, 100);</b>
+<b class="fc">&nbsp;            this.add(button2);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(texturePath!=null&amp;&amp;texturePath!=&quot;&quot;){</b>
+&nbsp;            try{
+<b class="fc">&nbsp;                titleImage = ImageIO.read(getClass().getResourceAsStream(texturePath));</b>
+<b class="fc">&nbsp;            } catch(IOException e){</b>
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;        
+&nbsp;
+&nbsp;        
+&nbsp;        //this.pack
+&nbsp;    }
+&nbsp;
+&nbsp;    public String subtitleDisplay(){
+<b class="fc">&nbsp;        return &quot;&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void paintComponent(Graphics g){
+<b class="fc">&nbsp;        super.paintComponent(g);</b>
+&nbsp;
+<b class="fc">&nbsp;        Graphics2D g2 = (Graphics2D)g;</b>
+&nbsp;        
+<b class="fc">&nbsp;        if(titleImage!=null){</b>
+<b class="fc">&nbsp;            g2.drawImage(titleImage, 800-(200), 150, 400, 75, null);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        g2.setFont(arial40);</b>
+<b class="fc">&nbsp;        g2.setColor(Color.WHITE);</b>
+<b class="fc">&nbsp;        g2.drawString(subtitleDisplay(), 700, 280);</b>
+&nbsp;        
+&nbsp;        //g2.dispose();
+&nbsp;        
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

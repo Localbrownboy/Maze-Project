@@ -1,0 +1,295 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MobileEntity</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.entity</a>
+</div>
+
+<h1>Coverage Summary for Class: MobileEntity (com.group23.app.entity)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MobileEntity</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37.1%
+  </span>
+  <span class="absValue">
+    (23/62)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">MobileEntity$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    57.1%
+  </span>
+  <span class="absValue">
+    (4/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    35.9%
+  </span>
+  <span class="absValue">
+    (23/64)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.entity;
+&nbsp;
+&nbsp;import com.group23.app.*;
+&nbsp;import com.group23.app.level.MazeLevel;
+&nbsp;import com.group23.app.utils.GameUtils;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;
+&nbsp;/**
+&nbsp; * Base class of all entities that have the ability to move between tiles
+&nbsp; * Extends {@link Entity}
+&nbsp; */
+&nbsp;abstract public class MobileEntity extends Entity{
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the entity
+&nbsp;     * @param L Level that the entity spawns in on
+&nbsp;     */
+&nbsp;    public MobileEntity(MazeLevel L){
+<b class="fc">&nbsp;        super(L);</b>
+<b class="fc">&nbsp;        moved = false;</b>
+&nbsp;         
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * the direction that the entity is currently facing
+&nbsp;     */
+<b class="fc">&nbsp;    protected Direction curDirection = Direction.Up;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * stores frames for playing the movement animation
+&nbsp;     */
+<b class="fc">&nbsp;    protected int animFrames = 0;</b>
+<b class="fc">&nbsp;    protected int maxAnimFrames = 0;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * stores the last position of the entity, for animation purposes
+&nbsp;     */
+<b class="fc">&nbsp;    public int[] previousPosition = new int[2];</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * checks if the entity has moved
+&nbsp;     */
+<b class="fc">&nbsp;    protected boolean moved = false;</b>
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Attempts to Relocate the entity to a new tile, does not move the entity if it tries to move to a solid tile
+&nbsp;     * @param x the x coordinate to move to
+&nbsp;     * @param y the y coordinate to move to
+&nbsp;     */
+&nbsp;    public boolean tryMoveTo(int x,int y){
+&nbsp;
+<b class="fc">&nbsp;        if(x&lt;0 || x &gt;= level.width|| y &lt; 0 || y &gt;= level.height){</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if(level.tileAt(x, y).checkifCollides() == true){</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        MoveTo(x, y);</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Relocates the entity to a new tile
+&nbsp;     * @param x the x coordinate to move to
+&nbsp;     * @param y the y coordinate to move to
+&nbsp;     */
+&nbsp;    public void MoveTo(int x,int y){
+&nbsp;
+<b class="fc">&nbsp;        if(x&lt;0 || x &gt;= level.width|| y &lt; 0 || y &gt;= level.height){</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="fc">&nbsp;        moved = true;</b>
+<b class="fc">&nbsp;        previousPosition = getPosition().clone();</b>
+&nbsp;
+<b class="fc">&nbsp;        if(level.tileAt(getPosition()[0], getPosition()[1]).entities.contains(this)){</b>
+<b class="fc">&nbsp;            level.tileAt(getPosition()[0], getPosition()[1]).entities.remove(this);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        setPosition(x, y);</b>
+&nbsp;
+<b class="fc">&nbsp;        level.tileAt(x, y).entities.add(this);</b>
+&nbsp;
+<b class="fc">&nbsp;        maxAnimFrames = (int)(((float)level.tickspeed)/5f);</b>
+<b class="fc">&nbsp;        animFrames = maxAnimFrames;</b>
+&nbsp;       // System.out.println(&quot;Anim frames set to:&quot; + maxAnimFrames);
+&nbsp;       // System.out.println(&quot;Prev Position: &quot; + previousPosition[0] +&quot;, &quot; + previousPosition[1]);
+&nbsp;       // System.out.println(&quot;Current Position:&quot; + getPosition()[0] +&quot;, &quot; + getPosition()[1]);
+&nbsp;
+&nbsp;        
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void update(){
+<b class="fc">&nbsp;        checkCollision(getCurrentTile().entities);</b>
+<b class="fc">&nbsp;        movementBehaviour();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void movementBehaviour(){
+&nbsp;
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void draw(Graphics2D g){
+<b class="nc">&nbsp;        </b>
+<b class="nc">&nbsp;        int ts = level.getTileSize();</b>
+&nbsp;        
+&nbsp;        Point drawPosition;
+<b class="nc">&nbsp;        Point drawPosition1;</b>
+<b class="nc">&nbsp;        Point drawPosition2 = new Point(level.getRenderBox().x + (getPosition()[0]*level.getTileSize()), level.getRenderBox().y + (getPosition()[1]*level.getTileSize()));</b>
+<b class="nc">&nbsp;        </b>
+<b class="nc">&nbsp;        float anim = ((float)animFrames)/((float)maxAnimFrames);</b>
+<b class="nc">&nbsp;        </b>
+<b class="nc">&nbsp;        if(moved){</b>
+<b class="nc">&nbsp;            drawPosition1= new Point(level.getRenderBox().x + (previousPosition[0]*level.getTileSize()), level.getRenderBox().y + (previousPosition[1]*level.getTileSize()));</b>
+<b class="nc">&nbsp;            drawPosition = GameUtils.pointLerp(drawPosition1, drawPosition2, 1f-anim);</b>
+<b class="nc">&nbsp;        }else{</b>
+<b class="nc">&nbsp;            drawPosition1 = drawPosition2;</b>
+<b class="nc">&nbsp;            drawPosition = drawPosition2;</b>
+&nbsp;        }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        if(additionalTextures.size()&gt;=4){</b>
+<b class="nc">&nbsp;            </b>
+<b class="nc">&nbsp;            switch(curDirection){</b>
+<b class="nc">&nbsp;                case Up:</b>
+<b class="nc">&nbsp;                g.drawImage(additionalTextures.get(Direction.Up.ordinal()), drawPosition.x, drawPosition.y, ts, ts, null);</b>
+<b class="nc">&nbsp;                break;</b>
+<b class="nc">&nbsp;                case Down:</b>
+<b class="nc">&nbsp;                g.drawImage(additionalTextures.get(Direction.Down.ordinal()), drawPosition.x, drawPosition.y, ts, ts, null);</b>
+<b class="nc">&nbsp;                break;</b>
+<b class="nc">&nbsp;                case Left:</b>
+<b class="nc">&nbsp;                g.drawImage(additionalTextures.get(Direction.Left.ordinal()), drawPosition.x, drawPosition.y, ts, ts, null);</b>
+<b class="nc">&nbsp;                break;</b>
+<b class="nc">&nbsp;                case Right:</b>
+<b class="nc">&nbsp;                g.drawImage(additionalTextures.get(Direction.Right.ordinal()), drawPosition.x, drawPosition.y, ts, ts, null);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            }
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        }else if(texture==null){</b>
+&nbsp;            return;
+&nbsp;            
+<b class="nc">&nbsp;        }else{</b>
+<b class="nc">&nbsp;            g.drawImage(texture, drawPosition.x, drawPosition.y, ts, ts, null);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        </b>
+<b class="nc">&nbsp;        if(animFrames&gt;0){</b>
+<b class="nc">&nbsp;            animFrames--;</b>
+&nbsp;        }
+&nbsp;        //find the location based on the game environment point draw bounds
+&nbsp;        
+&nbsp;
+&nbsp;        
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;      
+&nbsp;
+&nbsp;
+&nbsp;    
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>

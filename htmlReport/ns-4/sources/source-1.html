@@ -1,0 +1,271 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > GameEnvironment</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.group23.app.env</a>
+</div>
+
+<h1>Coverage Summary for Class: GameEnvironment (com.group23.app.env)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameEnvironment</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80.5%
+  </span>
+  <span class="absValue">
+    (33/41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.group23.app.env;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;
+&nbsp;import com.group23.app.Game;
+&nbsp;import com.group23.app.GameState;
+&nbsp;import com.group23.app.level.MazeLevel;
+&nbsp;import com.group23.app.level.TileManager;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp;* Class for GameEnvironment. Extends {@link JPanel} and implements the {@link Runnable} thread.
+&nbsp; * This is the screen for the main game.
+&nbsp; */
+&nbsp;public class GameEnvironment extends JPanel implements Runnable {
+&nbsp;
+&nbsp;    public final static int levelRenderSquareWidth = 760;
+<b class="fc">&nbsp;    public final static Point levelRenderSquareCentre = new Point(800, 400);</b>
+&nbsp;    
+&nbsp;    public static final int FPSCap = 60;
+&nbsp;
+&nbsp;    public MazeLevel level;
+&nbsp;
+&nbsp;    public long songPosition;
+&nbsp;
+<b class="fc">&nbsp;    TileManager tileM = new TileManager(this);</b>
+&nbsp;    public Thread processThread;// = null;
+<b class="fc">&nbsp;    public UI ui = new UI(this);</b>
+&nbsp;
+<b class="fc">&nbsp;    public GameEnvironment(){</b>
+<b class="fc">&nbsp;        this.setPreferredSize(new Dimension(Game.screenWidth, Game.screenHeight));</b>
+<b class="fc">&nbsp;        this.setBackground(Color.DARK_GRAY);</b>
+&nbsp;        //this.setDoubleBuffered(true);
+<b class="fc">&nbsp;        this.addKeyListener(Game.Input);</b>
+<b class="fc">&nbsp;        this.setFocusable(true);</b>
+&nbsp;        
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Function to start the game thread.
+&nbsp;     */
+&nbsp;    public void startThread(){
+&nbsp;
+<b class="fc">&nbsp;            processThread = new Thread(this);</b>
+<b class="fc">&nbsp;            processThread.start();</b>
+&nbsp;        
+&nbsp;        
+&nbsp;    }
+&nbsp;
+&nbsp;    /*public void stopThread(){
+&nbsp;        if(processThread==null){
+&nbsp;            return;
+&nbsp;        }
+&nbsp;       
+&nbsp;        try {
+&nbsp;            processThread.wait();
+&nbsp;        } catch (InterruptedException e) {
+&nbsp;            // TODO: handle exception
+&nbsp;            e.printStackTrace();
+&nbsp;        }
+&nbsp;    }*/
+&nbsp;
+&nbsp;    
+&nbsp;    /**
+&nbsp;     * Function to begin running the game.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void run() {
+&nbsp;        
+&nbsp;
+<b class="fc">&nbsp;        double interval = 1000000000/FPSCap;</b>
+<b class="fc">&nbsp;        double nextDraw = System.nanoTime() + interval;</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.print(&quot;.&quot;);</b>
+<b class="fc">&nbsp;        while(processThread!=null){</b>
+&nbsp;            
+<b class="fc">&nbsp;            if(Game.CurrentState==GameState.GameScreen&amp;&amp;level!=null){</b>
+&nbsp;              
+&nbsp;            
+<b class="fc">&nbsp;            updateLevel();</b>
+&nbsp;            
+<b class="fc">&nbsp;            repaint();</b>
+&nbsp;
+&nbsp;            try {
+&nbsp;                
+<b class="fc">&nbsp;                double remaining = nextDraw - System.nanoTime();</b>
+<b class="fc">&nbsp;                remaining = remaining/1000000;</b>
+&nbsp;
+<b class="fc">&nbsp;                if(remaining&lt;0){</b>
+<b class="fc">&nbsp;                    remaining = 0;</b>
+&nbsp;
+&nbsp;                }
+&nbsp;
+<b class="fc">&nbsp;                Thread.sleep((long)remaining);</b>
+&nbsp;
+<b class="fc">&nbsp;                nextDraw+= interval;</b>
+&nbsp;
+<b class="nc">&nbsp;            } catch (InterruptedException e) {</b>
+<b class="nc">&nbsp;                e.printStackTrace();</b>
+&nbsp;               
+<b class="fc">&nbsp;            }</b>
+&nbsp;        }
+&nbsp;        //System.out.println(&quot;Thread Running with game state: &quot; + Game.CurrentState);
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Function to update the level.
+&nbsp;     */
+&nbsp;    public void updateLevel(){
+&nbsp;
+&nbsp;        //player.update();
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        --level.ticksBeforeUpdate;</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        if(level.ticksBeforeUpdate&lt;=0){</b>
+<b class="fc">&nbsp;            if(Game.ActiveQueue!=null){</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Attempting Automatic Action&quot;);</b>
+<b class="fc">&nbsp;                Game.ActiveQueue.advanceQueue();</b>
+&nbsp;            }
+&nbsp;            
+<b class="fc">&nbsp;            System.out.println(&quot;Level Tick&quot;);</b>
+<b class="fc">&nbsp;            level.updateTick();</b>
+<b class="fc">&nbsp;            level.ticksBeforeUpdate = level.tickspeed;</b>
+<b class="fc">&nbsp;            Game.Input.setKeysFalse();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Function to draw the components needed on the screen.
+&nbsp;     * @param g is the component we want to draw.
+&nbsp;     */
+&nbsp;    public void paintComponent(Graphics g){
+<b class="nc">&nbsp;        super.paintComponent(g);</b>
+&nbsp;
+<b class="nc">&nbsp;        Graphics2D g2 = (Graphics2D)g;</b>
+<b class="nc">&nbsp;        if(level!=null){</b>
+&nbsp;            
+&nbsp;            //g2.setColor(Color.RED);
+&nbsp;            //check bounding box
+&nbsp;            //g2.fillRect(level.getRenderBox().x, level.getRenderBox().y, level.getRenderBox().width, level.getRenderBox().height);
+&nbsp;
+&nbsp;            //draw all entities in level (now handled by the TileManager)
+<b class="nc">&nbsp;            tileM.draw(g2);</b>
+&nbsp;
+&nbsp;            // UI
+<b class="nc">&nbsp;            ui.drawGraphics(g2);</b>
+&nbsp;
+&nbsp;
+&nbsp;            
+&nbsp;            /*
+&nbsp;            for(int i = 0; i &lt; level.entities.size(); i++){
+&nbsp;               level.entities.get(i).draw(g2);
+&nbsp;            }*/
+&nbsp;        }
+<b class="nc">&nbsp;        g2.dispose();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-04-04 00:43</div>
+</div>
+</body>
+</html>
